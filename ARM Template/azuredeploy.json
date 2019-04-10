@@ -1,0 +1,148 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"sites_ContosoUserService_name": {
+			"defaultValue": "ContosoUserService",
+			"type": "String"
+		},
+		"sites_ContosoHotelBooking_name": {
+			"defaultValue": "ContosoHotelBooking",
+			"type": "String"
+		},
+		"sites_ContosoBookingService_name": {
+			"defaultValue": "ContosoBookingService",
+			"type": "String"
+		},
+		"sites_ContosoFacilityService_name": {
+			"defaultValue": "ContosoFacilityService",
+			"type": "String"
+		},
+		"components_ContosoHotelBooking_name": {
+			"defaultValue": "ContosoHotelBooking",
+			"type": "String"
+		},
+		"serverfarms_ContosoBookingServicePlan_name": {
+			"defaultValue": "ContosoBookingServicePlan",
+			"type": "String"
+		},
+		"storageAccounts_contosobookingservice_name": {
+			"defaultValue": "contosobookingservice",
+			"type": "String"
+		},
+		"alertrules_Failure_Anomalies___ContosoHotelBooking_name": {
+			"defaultValue": "Failure Anomalies - ContosoHotelBooking",
+			"type": "String"
+		}
+	},
+	"variables": {
+		
+	},
+	"resources": [{
+		"type": "microsoft.insights/components",
+		"apiVersion": "2015-05-01",
+		"name": "[parameters('components_ContosoHotelBooking_name')]",
+		"location": "southeastasia",
+		"kind": "web",
+		"properties": {
+			"Application_Type": "web",
+			"Request_Source": "IbizaWebAppExtensionCreate"
+		}
+	},
+	{
+		"type": "Microsoft.Storage/storageAccounts",
+		"apiVersion": "2018-07-01",
+		"name": "[parameters('storageAccounts_contosobookingservice_name')]",
+		"location": "southeastasia",
+		"sku": {
+			"name": "Standard_LRS",
+			"tier": "Standard"
+		},
+		"kind": "Storage",
+		"properties": {
+			"networkAcls": {
+				"bypass": "AzureServices",
+				"virtualNetworkRules": [],
+				"ipRules": [],
+				"defaultAction": "Allow"
+			},
+			"supportsHttpsTrafficOnly": false,
+			"encryption": {
+				"services": {
+					"file": {
+						"enabled": true
+					},
+					"blob": {
+						"enabled": true
+					}
+				},
+				"keySource": "Microsoft.Storage"
+			}
+		}
+	},
+	{
+		"type": "Microsoft.Web/serverfarms",
+		"apiVersion": "2016-09-01",
+		"name": "[parameters('serverfarms_ContosoBookingServicePlan_name')]",
+		"location": "Southeast Asia",
+		"sku": {
+			"name": "Y1",
+			"tier": "Dynamic",
+			"size": "Y1",
+			"family": "Y",
+			"capacity": 0
+		},
+		"kind": "functionapp",
+		"properties": {
+			"name": "[parameters('serverfarms_ContosoBookingServicePlan_name')]",
+			"perSiteScaling": false,
+			"reserved": false,
+			"targetWorkerCount": 0,
+			"targetWorkerSizeId": 0
+		}
+	},
+	{
+		"apiVersion": "2015-08-01",
+		"type": "Microsoft.Web/sites",
+		"name": "[parameters('sites_ContosoBookingService_name')]",
+		"location": "Southeast Asia",
+		"kind": "functionapp",
+		"dependsOn": ["[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ContosoBookingServicePlan_name'))]"],
+		"properties": {
+			"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ContosoBookingServicePlan_name'))]"
+		}
+	},
+	{
+		"apiVersion": "2015-08-01",
+		"type": "Microsoft.Web/sites",
+		"name": "[parameters('sites_ContosoUserService_name')]",
+		"location": "Southeast Asia",
+		"kind": "functionapp",
+		"dependsOn": ["[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ContosoBookingServicePlan_name'))]"],
+		"properties": {
+			"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ContosoBookingServicePlan_name'))]"
+		}
+	},
+	{
+		"apiVersion": "2015-08-01",
+		"type": "Microsoft.Web/sites",
+		"name": "[parameters('sites_ContosoHotelBooking_name')]",
+		"location": "Southeast Asia",
+		"kind": "functionapp",
+		"dependsOn": ["[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ContosoBookingServicePlan_name'))]"],
+		"properties": {
+			"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ContosoBookingServicePlan_name'))]"
+		}
+	},
+	{
+		"apiVersion": "2015-08-01",
+		"type": "Microsoft.Web/sites",
+		"name": "[parameters('sites_ContosoFacilityService_name')]",
+		"location": "Southeast Asia",
+		"kind": "functionapp",
+		"dependsOn": ["[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ContosoBookingServicePlan_name'))]"],
+		"properties": {
+			"serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_ContosoBookingServicePlan_name'))]"
+		}
+	}]
+}

@@ -1,0 +1,30 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_ContosoUserService_name": {
+            "value": "ContosoUserServiceABC"
+        },
+        "sites_ContosoHotelBooking_name": {
+            "value": "ContosoHotelBookingABC"
+        },
+        "sites_ContosoBookingService_name": {
+            "value": "ContosoBookingServiceABC"
+        },
+        "sites_ContosoFacilityService_name": {
+            "value": "ContosoFacilityServiceABC"
+        },
+        "components_ContosoHotelBooking_name": {
+            "value": "ContosoHotelBookingABC"
+        },
+        "serverfarms_ContosoBookingServicePlan_name": {
+            "value": "ContosoBookingServicePlanABC"
+        },
+        "storageAccounts_contosobookingservice_name": {
+            "value": "contosobookingserviceabc"
+        },
+        "alertrules_Failure_Anomalies___ContosoHotelBooking_name": {
+            "value": "ABC"
+        }
+    }
+}
