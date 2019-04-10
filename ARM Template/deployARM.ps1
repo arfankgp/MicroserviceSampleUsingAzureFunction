@@ -1,11 +1,14 @@
 # Powershell script to deploy ARM Template to Azure.
 [Cmdletbinding()]
 param ( 
-    [parameter(Mandatory = $false)]
-    [string]$subscriptionName = "Visual Studio Enterprise",
+    [parameter(Mandatory = $true)]
+    [string]$subscriptionName,
 
-    [parameter(Mandatory = $false)]
-    [string]$resourceGroupName = "HelloARM"
+    [parameter(Mandatory = $true)]
+    [string]$resourceGroupLocation,
+
+    [parameter(Mandatory = $true)]
+    [string]$resourceGroupName
 )
 
 begin {
@@ -19,7 +22,7 @@ begin {
     }
 }
 process {  
-    #New-AzureRmResourceGroup -Name $resourceGroupName -Location "East Us" -Verbose -Force
+    New-AzureRmResourceGroup -Name $resourceGroupName -Location $resourceGroupLocation -Verbose -Force
     New-AzureRmResourceGroupDeployment -ResourceGroupName $resourceGroupName -TemplateFile "$PSScriptRoot\azuredeploy.json" -TemplateParameterFile "$PSScriptRoot\params\azuredeploy.parameters.json"    
 
 }
